@@ -1,0 +1,18 @@
+services:
+  # PostgreSQL
+  db:
+    image: postgres:16-alpine # PostgreSQL official image
+    ports:
+      # This maps port 5432 inside the container (the default PostgreSQL port)
+      # to port 6666 on your host machine. You can connect to the database
+      # locally using port 6666, and Docker will forward traffic to the container.
+      - "6666:5432"
+    environment:
+      POSTGRES_DB: vendor
+      POSTGRES_USER: vendor
+      POSTGRES_PASSWORD: vendor
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
