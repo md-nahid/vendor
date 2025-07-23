@@ -15,6 +15,13 @@
       "when": 1752862108132,
       "tag": "0001_new_viper",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753289744057,
+      "tag": "0002_brave_cerise",
+      "breakpoints": true
     }
   ]
 }
