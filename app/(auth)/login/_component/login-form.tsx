@@ -25,9 +25,8 @@ const Schema = z.object({
   password: z.string().min(8, { error: 'Minimum 8 character is required!' }),
 })
 
-export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
-  const form = useForm<z.infer<typeof Schema>>({
-    resolver: zodResolver(Schema),
+export function LoginForm() {
+  const form = useForm({
     defaultValues: {
       email: '',
       password: '',
@@ -42,7 +41,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
   }
 
   return (
-    <div className={cx('mx-auto flex w-full max-w-sm flex-col gap-6', className)} {...props}>
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
       <Card>
         <div className="text-center">
           <h1 className="text-xl font-semibold">Login to your account</h1>
