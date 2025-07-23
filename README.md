@@ -1,9 +1,17 @@
 # Vendor
 
 ```bash
+copy .env.example .env
+
 bun install
 
+docker compose up
+
 bun dev
+
+bun run build
+
+bun run start
 ```
 
 ## PLANING

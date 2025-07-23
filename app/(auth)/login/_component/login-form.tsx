@@ -5,6 +5,7 @@ import { TextField } from '@/components/form/text-field'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { cx } from '@/config/cva.config'
+import { Routes } from '@/config/route.config'
 import { useForm } from '@tanstack/react-form'
 import Link from 'next/link'
 import { z } from 'zod/v4'
@@ -66,9 +67,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
           </form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{' '}
-            <a href="#" className="underline underline-offset-4">
+            <Link href={Routes.auth.signUp.url} className="underline underline-offset-4">
               Sign up
-            </a>
+            </Link>
           </div>
         </CardContent>
       </Card>
