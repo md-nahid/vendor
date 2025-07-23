@@ -8,29 +8,39 @@ import { cx } from '@/config/cva.config'
 import { Routes } from '@/config/route.config'
 import { useForm } from '@tanstack/react-form'
 import Link from 'next/link'
-import { z } from 'zod/v4'
+import { z } from 'zod'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { signIn } from '../actions'
 
-export const Schema = z.object({
+// export const Schema = z.object({
+//   email: z.email().transform((val) => val.toLowerCase()),
+//   password: z
+//     .string()
+//     .min(8, { error: 'Minimum 8 character is required!' })
+//     .max(100, { error: 'Maximum 100 character is allowed!' }),
+// })
+const Schema = z.object({
   email: z.email().transform((val) => val.toLowerCase()),
-  password: z
-    .string()
-    .min(8, { error: 'Minimum 8 character is required!' })
-    .max(100, { error: 'Maximum 100 character is allowed!' }),
+  password: z.string().min(8, { error: 'Minimum 8 character is required!' }),
 })
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
-  const form = useForm({
+  const form = useForm<z.infer<typeof Schema>>({
+    resolver: zodResolver(Schema),
     defaultValues: {
       email: '',
       password: '',
     },
-    validators: {
-      onSubmit: Schema,
-    },
-    onSubmit: (values) => {
-      console.log('Form submitted with values:', values)
-    },
   })
+
+  function onSubmit(values: z.infer<typeof Schema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values)
+    signIn(values)
+  }
+
   return (
     <div className={cx('mx-auto flex w-full max-w-sm flex-col gap-6', className)} {...props}>
       <Card>
@@ -39,32 +49,48 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
           <p className="text-muted-foreground text-sm">Enter your details below to login to your account</p>
         </div>
         <CardContent>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              form.handleSubmit()
-            }}
-          >
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <form.Field name="email">{(field) => <TextField label="Email" field={field} />}</form.Field>
-                <div className="mt-2 flex justify-end">
-                  <Link href="#" className="ml-auto inline-block text-xs underline underline-offset-4">
-                    Forgot your password?
-                  </Link>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }: { field: any }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="Email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="mt-2 flex justify-end">
+                    <Link href="#" className="ml-auto inline-block text-xs underline underline-offset-4">
+                      Forgot your password?
+                    </Link>
+                  </div>
                 </div>
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }: { field: any }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="Password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
               </div>
-              <form.Field name="password">{(field) => <PasswordField label="Password" field={field} />}</form.Field>
-              <form.Subscribe selector={(state) => [state.canSubmit]}>
-                {([canSubmit]) => (
-                  <Button type="submit" disabled={!canSubmit} className="w-full">
-                    Login
-                  </Button>
-                )}
-              </form.Subscribe>
-            </div>
-          </form>
+            </form>
+          </Form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{' '}
             <Link href={Routes.auth.signUp.url} className="underline underline-offset-4">
