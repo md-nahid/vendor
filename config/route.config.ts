@@ -7,4 +7,7 @@ export const Routes = {
       url: '/sign-up',
     },
   },
+  dashboard: {
+    url: '/dashboard',
+  },
 }
