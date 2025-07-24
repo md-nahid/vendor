@@ -1,43 +1,25 @@
 'use server'
 
 import { authClient } from '@/auth-client'
+import { Routes } from '@/config/route.config'
+import { redirect } from 'next/navigation'
 
 export const signInAction = async (prev: any, formData: FormData) => {
   const { data, error } = await authClient.signIn.email({
-    /**
-     * The user email
-     */
     email: formData.get('email') as string,
-    /**
-     * The user password
-     */
     password: formData.get('password') as string,
-    /**
-     * A URL to redirect to after the user verifies their email (optional)
-     */
-    callbackURL: "/dashboard",
-    /**
-     * remember the user session after the browser is closed. 
-     * @default true
-     */
-    rememberMe: false
-  }, {
-    //callbacks
+    // callbackURL: Routes.dashboard.url,
+    rememberMe: true,
   })
 
   if (error) {
     return {
-      // ...prev,
       data: null,
       error,
-      message: 'Something went wrong!'
+      message: 'Something went wrong!',
     }
   }
 
-  return {
-    // ...prev,
-    data,
-    error: null,
-    message: 'Login successfully!',
-  }
+  // Redirect after successful login
+  redirect(Routes.dashboard.url)
 }

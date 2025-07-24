@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Routes } from '@/config/route.config'
 import { mergeForm, useForm, useTransform } from '@tanstack/react-form'
-import { initialFormState } from '@tanstack/react-form/nextjs'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import signUpAction from '../actions'
@@ -30,9 +29,6 @@ export function SignUpForm() {
   })
 
   console.log('state', state)
-
-  // const formErrors = useStore(form.store, (formState) => formState.errors)
-  // console.log('formErrors', formErrors)
 
   return (
     <div className="mx-auto w-full max-w-sm">
